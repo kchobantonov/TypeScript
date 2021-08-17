@@ -3304,6 +3304,7 @@ namespace ts {
 
     export interface JSDocTemplateTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocTemplateTag;
+        readonly parent: JSDoc;
         readonly constraint: JSDocTypeExpression | undefined;
         readonly typeParameters: NodeArray<TypeParameterDeclaration>;
     }

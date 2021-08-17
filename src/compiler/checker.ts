@@ -2045,6 +2045,13 @@ namespace ts {
                     lastSelfReferenceLocation = location;
                 }
                 lastLocation = location;
+                if (isJSDocTemplateTag(location)) {
+                    const container = location.parent.tags && find(location.parent.tags, isJSDocTypeAlias) || getHostSignatureFromJSDoc(location);
+                    if (container) {
+                        location = container;
+                        continue;
+                    }
+                }
                 location = location.parent;
             }
 
@@ -33458,7 +33465,7 @@ namespace ts {
                 }
             }
 
-            checkTypeParameters(node.typeParameters);
+            checkTypeParameters(getEffectiveTypeParameterDeclarations(node));
 
             forEach(node.parameters, checkParameter);
 
@@ -35089,6 +35096,7 @@ namespace ts {
                 checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             }
             checkSourceElement(node.typeExpression);
+            checkTypeParameters(getEffectiveTypeParameterDeclarations(node));
         }
 
         function checkJSDocTemplateTag(node: JSDocTemplateTag): void {
